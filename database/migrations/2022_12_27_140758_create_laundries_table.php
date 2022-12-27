@@ -15,6 +15,14 @@ return new class extends Migration
     {
         Schema::create('laundries', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('phoneNumber');
+            $table->string('clothes');
+            $table->integer('weight');
+            $table->string('message');
+            $table->string('category');
+            $table->integer('price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
