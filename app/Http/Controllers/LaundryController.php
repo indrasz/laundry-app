@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
+use App\Models\Laundry;
 use Illuminate\Http\Request;
+use App\Http\Requests\LaundryRequest;
+use Yajra\DataTables\Facades\DataTables;
 
 class LaundryController extends Controller
 {
@@ -13,7 +17,37 @@ class LaundryController extends Controller
      */
     public function index()
     {
-        return view('pages.laundry.index');
+        if (request()->ajax()) {
+            $query = Laundry::query();
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($item) {
+                    return '
+
+                    <div class="flex gap-5">
+
+                        <a class="inline-block border border-gray-700 bg-gray-700 text-gray-700 rounded-md px-2 py-1 transition duration-500 ease select-none hover:bg-gray-800 focus:outline-none focus:shadow-outline mr-3"
+                            href="' . route('dashboard.laundry.edit',  $item->id) . '">
+                            Edit
+                        </a>
+
+                        <form class="inline-block mx-4" action="' . route('dashboard.laundry.destroy', $item->id) . '" method="POST">
+                            <button class="border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline show_confirm">
+                                Hapus
+                            </button>
+                            ' . method_field('delete') . csrf_field() . '
+                        </form>
+
+                    </div>
+
+                    ';
+                })
+                ->rawColumns(['action'])
+                ->make();
+        }
+        $laundry = Laundry::orderBy('created_at', 'asc')->paginate(15);
+        return view('pages.laundry.index', compact('laundry'));
+
     }
 
     /**
@@ -23,7 +57,7 @@ class LaundryController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.laundry.create');
     }
 
     /**
@@ -32,9 +66,13 @@ class LaundryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LaundryRequest $request)
     {
-        //
+        $data = $request->all();
+        Laundry::create($data);
+
+        toast()->success('Save has been success');
+        return redirect()->route('dashboard.laundry.index');
     }
 
     /**
@@ -54,9 +92,9 @@ class LaundryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Laundry $laundry)
     {
-        //
+        return view('pages.laundry.edit', compact('laundry'));
     }
 
     /**
@@ -66,9 +104,14 @@ class LaundryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(LaundryRequest $request, Laundry $laundry)
     {
-        //
+        $data = $request->all();
+
+        $laundry->update($data);
+
+        toast()->success('Update data has been success');
+        return redirect()->route('dashboard.laundry.index');
     }
 
     /**
@@ -79,6 +122,9 @@ class LaundryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $laundry = Laundry::findorFail($id);
+        $laundry->delete();
+        toast()->success('Delete has been success');
+        return redirect()->route('dashboard.laundry.index');
     }
 }
