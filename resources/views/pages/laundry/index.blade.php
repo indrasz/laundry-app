@@ -14,7 +14,7 @@
                 </a>
             </div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-3">
-                
+
                 <div class="hidden sm:flex flex-col">
                     <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-4 inline-block w-full sm:px-6 lg:px-8">
@@ -85,7 +85,7 @@
                                                         </button>
                                                     </form>
 
-                                                    <a href="{{ route('dashboard.laundry.edit', $item->id) }}"
+                                                    <a target="_blank" href="https://api.whatsapp.com/send?phone=+6282283127185&text={{ strip_tags($item->message) }}"
                                                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-700 rounded">
                                                         Send
                                                     </a>
@@ -109,30 +109,65 @@
                     </div>
                 </div>
 
-                <div class="sm:hidden flex flex-col">
-                    <div class="overflow-x-auto">
-                        @forelse ($laundry as $key => $item)
-                            <div class="flex justify-center">
-                                <div class="block rounded-lg shadow-lg bg-white max-w-sm text-center">
-                                    <div class="py-3 px-6 border-b border-gray-300">
-                                        Featured
-                                    </div>
-                                    <div class="p-6">
-                                        <h5 class="text-gray-900 text-xl font-medium mb-2">Special title treatment</h5>
-                                        <p class="text-gray-700 text-base mb-4">
-                                            With supporting text below as a natural lead-in to additional content.
-                                        </p>
-                                        <button type="button"
-                                            class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Button</button>
-                                    </div>
-                                    <div class="py-3 px-6 border-t border-gray-300 text-gray-600">
-                                        2 days ago
+                <div class="sm:hidden">
+                    @forelse ($laundry as $key => $item)
+                        <div class="flex justify-center mb-6">
+                            <div class="block rounded-lg shadow-lg bg-white w-full">
+                                <div class="p-12">
+                                    <table class="border-0 text w-full">
+                                        <tr>
+                                            <td class="justify-start">
+                                                <p class="font-semibold">Username</p>
+                                            </td>
+                                            <td class="flex justify-end">
+                                                <p class="text-gray-500">{{ $item->name }}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class=" justify-start">
+                                                <p class="font-semibold">Phone Number</p>
+                                            </td>
+                                            <td class="flex justify-end">
+                                                <p class="text-gray-500">{{ $item->phoneNumber }}
+                                                </p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class=" justify-start">
+                                                <p class="font-semibold">Category</p>
+                                            </td>
+                                            <td class="flex justify-end">
+                                                <p class="text-gray-500">{{ $item->category }}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class=" justify-start">
+                                                <p class="font-semibold">Price</p>
+                                            </td>
+                                            <td class="flex justify-end">
+                                                <p class="text-gray-500">{{ $item->price }}</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="flex gap-1 mt-6">
+                                        <a type="button" href="{{ route('dashboard.laundry.edit', $item->id) }}"
+                                            class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Edit</a>
+                                        <form action="{{ route('dashboard.laundry.destroy', $item->id) }}"
+                                            method="POST">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit"
+                                                class=" inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out show_confirm">Delete</button>
+                                        </form>
+                                        <a type="button"
+                                            class=" inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">Send</a>
                                     </div>
                                 </div>
+
                             </div>
-                        @empty
-                        @endforelse
-                    </div>
+                        </div>
+                    @empty
+                    @endforelse
                 </div>
                 {{ $laundry->links() }}
             </div>
