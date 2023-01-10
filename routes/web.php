@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LaundryController;
 use App\Http\Controllers\ProfileController;
@@ -27,6 +28,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::name('dashboard.')->prefix('dashboard')->group(function () {
         Route::middleware(['auth', 'admin'])->group(function () {
+            Route::get('/', [DashboardController::class, 'index'])->name('index');
             Route::resource('laundry', LaundryController::class);
             Route::resource('history', HistoryController::class);
         });

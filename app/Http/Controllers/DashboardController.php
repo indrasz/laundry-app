@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Laundry;
 use Illuminate\Http\Request;
 
-class HistoryController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +13,6 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        // $laundry = Laundry::onlyTrashed()->paginate(10);
-        // return view('pages.history.index', compact('laundry'));
         return view('pages.index');
     }
 
@@ -35,9 +32,9 @@ class HistoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($id)
+    public function store(Request $request)
     {
-       //
+        //
     }
 
     /**
@@ -69,22 +66,9 @@ class HistoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Laundry $laundry, $id)
+    public function update(Request $request, $id)
     {
-
-        $laundry = Laundry::withTrashed()->findOrFail($id);
-
-        if ($laundry->trashed()) {
-
-            $laundry->restore();
-
-            toast()->success('Restore succeeded');
-            return redirect()->route('dashboard.history.index');
-        } else {
-
-            alert()->error('Something went wrong!');
-            return redirect()->route('dashboard.history.index');
-        }
+        //
     }
 
     /**
