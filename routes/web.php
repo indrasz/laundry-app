@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             Route::get('/', [DashboardController::class, 'index'])->name('index');
             Route::resource('laundry', LaundryController::class);
             Route::resource('history', HistoryController::class);
+            Route::get('download/{id}', [LaundryController::class, 'downloadPdf'])->name('downloadPdf');
         });
     });
 });

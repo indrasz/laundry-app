@@ -14,9 +14,8 @@ class HistoryController extends Controller
      */
     public function index()
     {
-        // $laundry = Laundry::onlyTrashed()->paginate(10);
-        // return view('pages.history.index', compact('laundry'));
-        return view('pages.index');
+        $laundry = Laundry::onlyTrashed()->paginate(10);
+        return view('pages.history.index', compact('laundry'));
     }
 
     /**

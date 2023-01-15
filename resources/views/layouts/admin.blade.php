@@ -23,6 +23,8 @@
 
         @include('includes.navbar')
 
+        @include('sweetalert::alert')
+
         <!-- End Navbar -->
         @yield('content')
 

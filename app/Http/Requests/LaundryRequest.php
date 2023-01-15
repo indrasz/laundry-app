@@ -28,8 +28,7 @@ class LaundryRequest extends FormRequest
             'phoneNumber' => 'required|max:255',
             'clothes' => 'required|max:255',
             'category' => 'required|max:255',
-            'weight' => 'required|integer',
-            'price' => 'required|integer',
+            'weight' => 'required|between:0,99.99',
             'message' => 'required',
         ];
     }

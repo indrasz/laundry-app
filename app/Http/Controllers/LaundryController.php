@@ -6,6 +6,7 @@ use Alert;
 use App\Models\Laundry;
 use Illuminate\Http\Request;
 use App\Http\Requests\LaundryRequest;
+use PDF;
 use Yajra\DataTables\Facades\DataTables;
 
 class LaundryController extends Controller
@@ -53,9 +54,9 @@ class LaundryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Laundry $laundry)
     {
-        //
+        return view('pages.laundry.show', compact('laundry'));
     }
 
     /**
@@ -98,5 +99,11 @@ class LaundryController extends Controller
         $laundry->delete();
         toast()->success('Delete has been success');
         return redirect()->route('dashboard.laundry.index');
+    }
+
+    public function downloadPdf($id){
+        $laundry = Laundry::findorFail($id);
+        $pdf = PDF::loadView('pages.laundry.pdf', ['laundry' => $laundry]);
+        return $pdf->stream();
     }
 }
